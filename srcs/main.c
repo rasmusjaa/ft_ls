@@ -6,16 +6,26 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 14:59:50 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/01/17 17:05:52 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/01/20 19:51:34 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdlib.h>
 #include "ft_printf.h"
 #include <dirent.h>
+#include "ft_ls.h"
 
 #define N 12 // Number of files
 #define W 80 // Terminal width
+
+
+void		ls_usage(t_options *options)
+{
+	free(options);
+	ft_printf("usage: ./ft_ls [-lRart] [directory ...]\n");
+	exit (1);
+}
 
 size_t		longest_name(DIR	*dir)
 {
@@ -34,33 +44,108 @@ size_t		longest_name(DIR	*dir)
 	return (longest);
 }
 
-int		main(int ac, char **av)
+static int	ls_open_dir(char *str, char **av, t_options *options)
 {
 	DIR				*dir;
-	struct dirent	*sd;
 	int				len;
+	struct dirent	*sd;
 
-	if (ac == 1)
-		dir = opendir(".");
-	else
-		dir = opendir(av[1]);
+	ft_printf("l %d R %d a %d r %d t %d\n", options->l_flag, options->cr_flag,	options->a_flag, options->r_flag, options->t_flag);
+	dir = opendir(str);
 	if (dir == NULL)
 	{
-		ft_printf("%s: %s: No such file or directory\n", av[0], av[1]);
+		ft_printf("%s: %s: No such file or directory\n", av[0], str);
 		exit(1);
 	}
 	len = longest_name(dir);
-	ft_printf("longest %d\n", len);
 	closedir(dir);
-	dir = opendir(".");
+	dir = opendir(str);
 	while((sd = readdir(dir)) != NULL)
 	{
-		ft_printf("%*s\n", len, sd->d_name);
+		ft_printf("%*s\n", len + 1, sd->d_name);
 	}
 	ft_printf("\n");
 	closedir(dir);
 	return (0);
 }
+
+static int	ls_read_dir(int ac, char **av, int i, t_options *options)
+{
+	if (!av[i])
+	{
+		ft_printf("no dir\n");
+		ls_open_dir(".", av, options);
+	}
+	while (i < ac)
+	{
+		ft_printf("av is %s\n", av[i]);
+		ls_open_dir(av[i], av, options);
+		i++;
+	}
+	return (0);
+}
+
+static void	ls_set_options(t_options *options)
+{
+	options->l_flag = 0;
+	options->cr_flag = 0;
+	options->a_flag = 0;
+	options->r_flag = 0;
+	options->t_flag = 0;
+}
+
+static int	ls_check_char(char c, t_options *options)
+{
+	if (c == 'l')
+		options->l_flag = 1;
+	else if (c == 'R')
+		options->l_flag = 1;
+	else if (c == 'a')
+		options->l_flag = 1;
+	else if (c == 'r')
+		options->l_flag = 1;
+	else if (c == 't')
+		options->l_flag = 1;
+	else if (c == '\0')
+		return (0);
+	else
+		return (1);
+	return (0);
+}
+
+static void	ls_options(int ac, char **av, t_options *options)
+{
+	int				i;
+	int				j;
+
+	ls_set_options(options);
+	i = 1;
+	while (i < ac && av[i][0] == '-')
+	{
+		j = 1;
+		while (av[i][j])
+		{
+			if (ls_check_char(av[i][j], options) != 0)
+				ls_usage(options);
+			j++;
+		}
+		i++;
+	}
+	ft_printf("options checked, i %d\n", i);
+	ls_read_dir(ac, av, i, options);
+}
+
+int			main(int ac, char **av)
+{
+	t_options		*options;
+
+	if (!(options = (t_options *)malloc(sizeof(t_options))))
+		return (1);
+	ls_options(ac, av, options);
+	free (options);
+	return (0);
+}
+// hai: kato makroja rv esim?
 // muista recursiivisesti kansiot alusta asti!
 
 /* READ man (2 or 3) or google
