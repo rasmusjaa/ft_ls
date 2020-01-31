@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/21 16:50:07 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/01/31 14:16:00 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/01/31 14:44:15 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static int		ls_layout(t_ls *data, char *str)
 		if (ls_is_not_dot(path) == 0 || data->a_flag == 1)
 		{
 			if (lstat(path, &buf) == -1)
-				ls_closedir_error(dir);
+				return (ls_closedir_error(dir));
 			else
 				ls_get_widths(data, buf, sd);
 		}
