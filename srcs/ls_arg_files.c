@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/29 14:29:40 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/01/29 18:27:50 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/01/31 15:50:36 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ void		ls_arg_file(int ac, char **av, int i, t_ls *data)
 			ls_get_widths(data, buf, av[i]);
 			node = ls_node_new(node);
 		}
-	data->col_count = data->term_w / (data->col_width + 1);
-	data->col_width = -1 * data->col_width;
+	ls_calc_columns(data);
 	data->arg_files > 0 ? ls_print_nodes(data) : free(data->start);
 }

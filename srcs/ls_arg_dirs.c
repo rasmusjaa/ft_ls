@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 19:12:49 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/01/29 20:21:46 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/01/31 15:53:26 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static int	ls_arg_dir_loop(int ac, char **av, int i, t_ls *data)
 			if (ls_open_dir(av[i], data) != 0)
 				ret = 1;
 		}
-		else
+		else if (S_ISDIR(buf.st_mode) != 0)
 			ft_printf("./ft_ls: %s: %s\n", av[i], strerror(errno));
 	}
 	return (ret);

@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/21 17:25:10 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/01/31 14:04:35 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/01/31 16:11:27 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ static void	ls_sort_modified(t_ls *data)
 		ft_strcat(ft_strcpy(str2, data->cur_dir), node->next->str);
 		lstat(str1, &buf1);
 		lstat(str2, &buf2);
-		if (buf1.st_mtime < buf2.st_mtime)
+		if (buf1.st_mtime < buf2.st_mtime || (buf1.st_mtime == buf2.st_mtime
+			&& ft_strcmp(node->str, node->next->str) > 0))
 		{
 			ls_list_swap(node);
 			node = data->start;
