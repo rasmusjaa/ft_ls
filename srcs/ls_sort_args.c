@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 14:08:15 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/01/29 15:40:29 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/02/05 13:36:38 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ static int	ls_arg_modified(char **av, int i)
 		ls_arg_swap(av, i);
 		return (1);
 	}
-	else if (buf1.st_mtime < buf2.st_mtime)
+	else if (buf1.st_mtime < buf2.st_mtime || (buf1.st_mtime == buf2.st_mtime
+			&& ft_strcmp(av[i], av[i + 1]) > 0))
 	{
 		ls_arg_swap(av, i);
 		return (1);
